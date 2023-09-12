@@ -80,6 +80,8 @@ export const updateHotel = async (req, res, next) => {
         { type: "resorts", count: resortCount },
         { type: "villas", count: villaCount },
         { type: "cabins", count: cabinCount },
+        { type: "type", count: typeCount },
+        { type: "status", count: statusCount },
       ]);
     } catch (err) {
       next(err);
@@ -100,3 +102,4 @@ export const updateHotel = async (req, res, next) => {
     }
   };
  
+
