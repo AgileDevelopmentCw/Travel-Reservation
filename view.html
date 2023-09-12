@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Drifter program</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+    <!-- <link href="static/img/favicon.png" rel="icon"> -->
+    <!-- <link rel="icon" {{ url_for('static', filename='img/favicon.png') }}> -->
+    <link href="{{ url_for('static', filename='img/favicon.png') }}" rel="stylesheet">
+
+    <!-- <link href="static/img/apple-touch-icon.png" rel="apple-touch-icon"> -->
+    <link href="{{ url_for('static', filename='img/apple-touch-icon.png') }}" rel="stylesheet">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+    <!-- <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    
+    <!-- <link href="static/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet"> -->
+    <link href="{{ url_for('static', filename='vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+    <!-- <link href="static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet"> -->
+    <link href="{{ url_for('static', filename='vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
+    <!-- <link href="static/vendor/aos/aos.css" rel="stylesheet"> -->
+    <link href="{{ url_for('static', filename='vendor/aos/aos.css') }}" rel="stylesheet">
+    <!-- <link href="static/vendor/glightbox/css/glightbox.min.css" rel="stylesheet"> -->
+    <link href="{{ url_for('static', filename='vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">    
+    <!-- <link href="static/vendor/swiper/swiper-bundle.min.css" rel="stylesheet"> -->
+    <link href="{{ url_for('static', filename='vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <!-- <link href="static/css/main.css" rel="stylesheet"> -->
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: UpConstruction
+  * Updated: Jul 27 2023 with Bootstrap v5.3.1
+  * Template URL: https://bootstrapmade.com/upconstruction-bootstrap-construction-website-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+
+   <!-- GOOGLE MAP JS CODE -->
+<script src="https://maps.googleapis.com/maps/api/js?callback=initMap&key=AIzaSyAZ1rla2p7rbYixzf98-s4CrT9AuGYKclY" defer></script>
+<script>
+
+  // Initialize and add the map
+  function initMap() {
+    
+    var prev_lat = '{{ record["prev_lati"] }}';
+    var prev_lon = '{{ record["prev_lon"] }}';
+    var curr_lat = '{{ record["curr_lati"] }}';
+    var curr_lon = '{{ record["curr_lon"] }}';
+    
+      var map;
+      var bounds = new google.maps.LatLngBounds();
+      var mapOptions = {
+          mapTypeId: 'roadmap'
+      };
+                      
+      // Display a map on the web page
+      map = new google.maps.Map(document.getElementById("mapCanvas"), mapOptions);
+      map.setTilt(50);
+          
+      // Multiple markers location, latitude, and longitude
+      var markers = [
+          ['Last Known Position', prev_lat, prev_lon],
+          ['Current Position', curr_lat, curr_lon],
+          
+      ];
+                          
+      // Info window content
+      var infoWindowContent = [
+          ['<div class="info_content">' +
+          '<h3>Last Known Position</h3>' +
+          '<p>Position that the object last appeared</p>' + 
+          '</div>'],
+          ['<div class="info_content">' +
+          '<h3>Current Position</h3>' +
+          '<p>Position that the object might be at the given time</p>' + 
+          '</div>']
+      ];
+          
+      // Add multiple markers to map
+      var infoWindow = new google.maps.InfoWindow(), marker, i;
+      
+      // Place each marker on the map  
+      for( i = 0; i < markers.length; i++ ) {
+          var position = new google.maps.LatLng(markers[i][1], markers[i][2]);
+          bounds.extend(position);
+          marker = new google.maps.Marker({
+              position: position,
+              map: map,
+              title: markers[i][0]
+          });
+          
+          // Add info window to marker    
+          google.maps.event.addListener(marker, 'click', (function(marker, i) {
+              return function() {
+                  infoWindow.setContent(infoWindowContent[i][0]);
+                  infoWindow.open(map, marker);
+              }
+          })(marker, i));
+  
+          // Center the map to fit all markers on the screen
+          map.fitBounds(bounds);
+      }
+  
+      // Set zoom level
+      var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
+          this.setZoom(14);
+          google.maps.event.removeListener(boundsListener);
+      });
+  }
+  
+  window.initMap = initMap;
+  </script>
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header d-flex align-items-center">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+
+        <a href="{{url_for('home')}}" class="logo d-flex align-items-center">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <!-- <img src="assets/img/logo.png" alt=""> -->
+        <h1>DRIFTER PATTERNS<span>.</span></h1>
+      </a>
+
+      <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+      <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+      <nav id="navbar" class="navbar">
+        <nav id="navbar" class="navbar">
+            <ul>
+              <li><a href="{{url_for('home')}}">Home</a></li>
+              <li><a href="{{url_for('viewRecords')}}">View record</a></li>
+              </ul>
+
+      </nav><!-- .navbar -->
+
+    </div>
+  </header><!-- End Header -->
+  <main id="main">
+    <div class="breadcrumbs d-flex align-items-center" style="background-image: url('static/img/breadcrumbs-bg.jpg');">
+        <div class="container position-relative d-flex flex-column align-items-center" data-aos="fade">
+          <h2>View Details of Prediction</h2>
+          <ol>
+            <li><a href="{{url_for('home')}}">Home</a></li>
+            <li>View Record</li>
+          </ol>
+  
+        </div>
+      </div>
+
+    <!-- ======= Get Started Section ======= -->
+    <section id="get-started" class="get-started section-bg">
+      
+        
+            <div class="container">
+        
+        
+        <div class="row justify-content-between gy-4" style="height: 50%;">
+         <div class="col-lg-4" data-aos="fade" style="padding: 25px;background-color:floralwhite;">
+              
+                <h3>PREVIOUS DATA</h3>
+                <div class="row gy-3" style="padding-top: 25px;">
+                    <table >
+                    <tbody>
+                    <tr >                        
+                        <td><b>Date and Time</b></td>
+                        <td>:{{record['prev_dt']}}</td>                        
+                    </tr>
+                    <tr>                        
+                        <td><b>Wind Direction</b> (degT)</td>
+                        <td>: {{record['prev_wdir']}}</td>                        
+                    </tr>
+                    <tr>                        
+                        <td><b>Wind Speed</b> (m/s)</td>
+                        <td>: {{record['prev_wspd']}}</td>                        
+                    </tr>
+                    <tr>                        
+                        <td><b>Atm. Pressure</b> (hPa)</td>
+                        <td>: {{record['prev_pres']}}</td>                        
+                    </tr>
+                    <tr>                        
+                        <td><b>Air Temperature</b> (degC)</td>
+                        <td>: {{record['prev_atmp']}}</td>                        
+                    </tr>
+                    <tr>                        
+                        <td><b>Surface Water Temp.</b> (degC)</td>
+                        <td>: {{record['prev_wtmp']}}</td>                        
+                    </tr>
+                    <tr>                        
+                        <td><b>Wave Height</b> (m)</td>
+                        <td>: {{record['prev_wvht']}}</td>                        
+                    </tr>
+                </tbody>
+            </table>                    
+                </div>
+             
+          </div>
+
+          <div class="col-lg-4" data-aos="fade" style="padding: 25px;background-color:blanchedalmond;">
+           
+              <h3>CURRENT DATA</h3>           
+              <div class="row gy-3" style="padding-top: 25px;">
+                <table>
+                <tbody>
+                <tr>                        
+                    <td><b>Date and Time</b></td>
+                    <td>: {{record['curr_dt']}}</td>                        
+                </tr>
+                <tr>                        
+                    <td><b>Wind Direction</b> (degT)</td>
+                    <td>: {{record['curr_wdir']}}</td>                        
+                </tr>
+                <tr>                        
+                    <td><b>Wind Speed</b> (m/s)</td>
+                    <td>: {{record['curr_wspd']}}</td>                        
+                </tr>
+                <tr>                        
+                    <td><b>Atm. Pressure</b> (hPa)</td>
+                    <td>: {{record['curr_pres']}}</td>                        
+                </tr>
+                <tr>                        
+                    <td><b>Air Temperature</b> (degC)</td>
+                    <td>: {{record['curr_atmp']}}</td>                        
+                </tr>
+                <tr>                        
+                    <td><b>Surface Water Temp.</b> (degC)</td>
+                    <td>: {{record['curr_wtmp']}}</td>                        
+                </tr>
+                <tr>                        
+                    <td><b>Wave Height</b> (m)</td>
+                    <td>: {{record['curr_wvht']}}</td>                        
+                </tr>  
+            </tbody> 
+        </table>             
+            </div>
+            
+          </div>         
+          <div class="col-lg-4" data-aos="fade" style="padding: 25px;background-color:floralwhite;">
+            <h3>LOCATION DATA</h3>
+            <div class="row gy-3" style="padding-top: 25px;">
+                <table>
+                <tbody>
+                <tr>                        
+                    <td><b>Previous Latitude</b> (deg)</td>
+                    <td>: {{record['prev_lati']}}</td>                        
+                </tr>
+                <tr>                        
+                    <td><b>Previous Longitude</b> (deg)</td>
+                    <td>: {{record['prev_lon']}}</td>                        
+                </tr> 
+                <tr>                        
+                    <td><b>Current Latitude</b> (deg)</td>
+                    <td>: {{record['curr_lati']}}</td>                        
+                </tr> 
+                <tr>                        
+                    <td><b>Current Longitude</b> (deg)</td>
+                    <td>: {{record['curr_lon']}}</td>                        
+                </tr>  
+                
+            </tbody>
+            </table>
+            </div>
+           
+        </div>
+          </div>
+        <hr>
+          <!-- End Quote Form -->
+          <div class="row gy-3" id="mapCanvas">
+            <!-- map -->
+        </div>
+        </div>
+      </div>
+</section><!-- End Get Started Section -->
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+
+    <div class="footer-content position-relative">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-4 col-md-6">
+            <div class="footer-info">
+              <h3>DRIFTER PATTERNS</h3>
+              <p>
+                <strong>Email:</strong> SUDESHIKA@GMAIL.com<br>
+              </p>
+              <div class="social-links d-flex mt-3">
+                <a href="#" class="d-flex align-items-center justify-content-center"><i class="bi bi-twitter"></i></a>
+                <a href="#" class="d-flex align-items-center justify-content-center"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="d-flex align-items-center justify-content-center"><i class="bi bi-instagram"></i></a>
+                <a href="#" class="d-flex align-items-center justify-content-center"><i class="bi bi-linkedin"></i></a>
+              </div>
+            </div>
+          </div><!-- End footer info column-->
+
+          <!-- <div class="col-lg-2 col-md-3 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><a href="#">Home</a></li>
+              <li><a href="#">About us</a></li>
+              <li><a href="#">Services</a></li>
+              <li><a href="#">Terms of service</a></li>
+              <li><a href="#">Privacy policy</a></li>
+            </ul>
+          </div> -->
+
+          <div class="col-lg-2 col-md-3 footer-links">
+           
+          </div><!-- End footer links column-->
+
+          <div class="col-lg-2 col-md-3 footer-links">
+            
+          </div><!-- End footer links column-->
+
+          <div class="col-lg-2 col-md-3 footer-links">
+            
+          </div><!-- End footer links column-->
+
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-legal text-center position-relative">
+      <div class="container">
+        <div class="copyright">
+          &copy; Copyright <strong><span>DRIFTER PATTERNS</span></strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+        
+        </div>
+      </div>
+    </div>
+
+  </footer>
+  <!-- End Footer -->
+
+  <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <div id="preloader"></div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    
+    const dt1 = document.getElementByName("dt1");
+    const dt2 = document.getElementByName("dt2");
+    const submitButton = document.getElementById("btnGenerate");
+
+    submitButton.addEventListener("click", function (event) {
+      alert("clicked")
+        event.preventDefault();
+
+        const dt1Val = dt1.value;
+        const dt2Val = dt2.value;
+        
+        const date1 = new Date(dt1);
+        const date2 = new Date(dt2);
+
+        if (date1 < date2) {
+            alert("Correct");
+        } 
+        if (date1 > date2) {
+            alert("Datetime Please enter a valid date for previous date");
+        } 
+    });
+});
+</script>
+
+
+  <!-- Vendor JS Files -->
+    <!-- <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script> -->
+    <!-- <link scr="{{ url_for('static', filename='css/main.cssvendor/bootstrap/js/bootstrap.bundle.min.js') }}" rel="script"> -->
+    <script src="{{url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+
+
+    <!-- <script src="static/vendor/aos/aos.js"></script> -->
+    <!-- <link scr="{{ url_for('static', filename='vendor/aos/aos.js') }}" rel="script"> -->
+    <script src="{{url_for('static', filename='vendor/aos/aos.js')}}"></script>
+
+
+    <!-- <script src="static/vendor/glightbox/js/glightbox.min.js"></script> -->
+    <!-- <link scr="{{ url_for('static', filename='vendor/glightbox/js/glightbox.min.js') }}" rel="script"> -->
+    <script src="{{url_for('static', filename='vendor/glightbox/js/glightbox.min.js')}}"></script>
+
+    <!-- <script src="static/vendor/isotope-layout/isotope.pkgd.min.js"></script> -->
+    <!-- <link scr="{{ url_for('static', filename='vendor/isotope-layout/isotope.pkgd.min.js') }}" rel="script"> -->
+    <script src="{{url_for('static', filename='vendor/isotope-layout/isotope.pkgd.min.js')}}"></script>
+
+    <!-- <script src="static/vendor/swiper/swiper-bundle.min.js"></script> -->
+    <!-- <link scr="{{ url_for('static', filename='vendor/swiper/swiper-bundle.min.js') }}" rel="script"> -->
+    <script src="{{url_for('static', filename='vendor/swiper/swiper-bundle.min.js')}}"></script>
+
+    <!-- <script src="static/vendor/purecounter/purecounter_vanilla.js"></script> -->
+    <!-- <link scr="{{ url_for('static', filename='vendor/purecounter/purecounter_vanilla.js') }}" rel="script"> -->
+    <script src="{{url_for('static', filename='vendor/purecounter/purecounter_vanilla.js')}}"></script>
+
+    <!-- Template Main JS File -->
+    <!-- <script src="static/js/main.js"></script> -->
+    <!-- <link scr="{{ url_for('static', filename='js/main.js') }}" rel="script"> -->
+    <script src="{{url_for('static', filename='js/main.js')}}"></script>
+
+</body>
+
+</html>
