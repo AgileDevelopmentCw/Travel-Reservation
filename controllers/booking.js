@@ -25,3 +25,20 @@ export const updateHotelBooking = async (req, res, next) => {
   }
 };
 
+export const deleteHotel = async (req, res, next) => {
+  try {
+    await Hotel.findByIdAndDelete(req.params.id);
+    res.status(200).json("Hotel has been deleted.");
+  } catch (err) {
+    next(err);
+  }
+};
+export const getHotel = async (req, res, next) => {
+  try {
+    const hotel = await Hotel.findById(req.params.id);
+    res.status(200).json(hotel);
+  } catch (err) {
+    next(err);
+  }
+};
+
