@@ -12,9 +12,9 @@ export const createHotel = async (req, res, next) => {
   }
 };
 
-export const updateHotel = async (req, res, next) => {
+export const updateHotelBooking = async (req, res, next) => {
   try {
-    const updatedHotel = await Hotel.findByIdAndUpdate(
+    const updatedHotelBooking = await Hotel.findByIdAndUpdate(
       req.params.id,
       { $set: req.body },
       { new: true }
