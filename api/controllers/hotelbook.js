@@ -1,17 +1,17 @@
 import Booking from "../models/Booking.js";
 
-// export const updateBooking = async (req,res,next)=>{
-//   try {
-//     const updatedBooking = await Booking.findByIdAndUpdate(
-//       req.params.id,
-//       { $set: req.body },
-//       { new: true }
-//     );
-//     res.status(200).json(updatedBooking);
-//   } catch (err) {
-//     next(err);
-//   }
-// }
+export const updateBooking = async (req,res,next)=>{
+  try {
+    const updatedBooking = await Booking.findByIdAndUpdate(
+      req.params.id,
+      { $set: req.body },
+      { new: true }
+    );
+    res.status(200).json(updatedBooking);
+  } catch (err) {
+    next(err);
+  }
+}
 // export const deleteBooking = async (req,res,next)=>{
 //   try {
 //     await Booking.findByIdAndDelete(req.params.id);
