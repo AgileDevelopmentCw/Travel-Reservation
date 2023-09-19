@@ -28,11 +28,11 @@ export const getBooking = async (req,res,next)=>{
     next(err);
   }
 }
-// export const getBookings = async (req,res,next)=>{
-//   try {
-//     const Bookings = await Booking.find();
-//     res.status(200).json(Bookings);
-//   } catch (err) {
-//     next(err);
-//   }
-// }
+export const getBookings = async (req,res,next)=>{
+  try {
+    const Bookings = await Booking.find();
+    res.status(200).json(Bookings);
+  } catch (err) {
+    next(err);
+  }
+}
