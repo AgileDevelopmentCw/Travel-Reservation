@@ -1,7 +1,7 @@
 import React from "react";
 
 const s = () => {
-  return <div>s</div>;
+  return <div>filters</div>;
 };
 
 export default s;
