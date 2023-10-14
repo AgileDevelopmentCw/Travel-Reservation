@@ -72,11 +72,11 @@ export const createCustomer = async (req, res, next) => {
 // //     next(err);
 // //   }
 // // };
-// export const getCustomers = async (req, res, next) => {
-//   try {
-//     const Customers = await Customer.find();
-//     res.status(200).json(Customers);
-//   } catch (err) {
-//     next(err);
-//   }
-// };
+export const getCustomers = async (req, res, next) => {
+  try {
+    const Customers = await Customer.find();
+    res.status(200).json(Customers);
+  } catch (err) {
+    next(err);
+  }
+};
